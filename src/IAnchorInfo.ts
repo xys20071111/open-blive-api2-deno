@@ -6,4 +6,4 @@ interface IAnchorInfo {
     // 主播头像
     uface: string
 }
-export { IAnchorInfo }
+export type { IAnchorInfo }
