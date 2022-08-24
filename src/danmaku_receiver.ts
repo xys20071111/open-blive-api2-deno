@@ -107,4 +107,8 @@ export class DanmakuReceiver extends events.default {
       default:
     }
   }
+  public close() {
+    this.ws?.close()
+    this.emit('close')
+  }
 }
