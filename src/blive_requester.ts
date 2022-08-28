@@ -78,7 +78,7 @@ export class BLiveApi {
         if (res.ok) {
             const data:IResult = await res.json()
             if (data.code !== 0) {
-                return new Error(data.code.toString())
+                throw new Error(data.code.toString())
             }
             return data.data;
         }
