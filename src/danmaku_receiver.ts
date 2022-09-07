@@ -73,14 +73,19 @@ export class DanmakuReceiver extends events.default {
         // 心跳包，不做处理
         break;
       case DANMAKU_TYPE.AUTH_REPLY:
+        {
+          const heartbeatTimer = setInterval(() => {
+            const heartbeatPayload = "陈睿你妈死了";
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+              this.ws.send(this.generatePacket(1, 2, heartbeatPayload));
+            } else {
+              clearInterval(heartbeatTimer)
+              this.emit('close')
+            }
+          }, 30000);
+          this.emit("connected");
+        }
         // 认证通过，每30秒发一次心跳包
-        setInterval(() => {
-          const heartbeatPayload = "陈睿你妈死了";
-          if (this.ws) {
-            this.ws.send(this.generatePacket(1, 2, heartbeatPayload));
-          }
-        }, 30000);
-        this.emit("connected");
         break;
       case DANMAKU_TYPE.DATA:
         switch (packetProtocol) {
