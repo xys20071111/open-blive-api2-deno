@@ -1,4 +1,4 @@
-import { events, brotli } from './deps.ts';
+import { events, deflate, Foras } from './deps.ts';
 
 enum DANMAKU_PROTOCOL {
   JSON = 0,
@@ -15,6 +15,7 @@ enum DANMAKU_TYPE {
   AUTH_REPLY = 8,
 }
 
+Foras.initSyncBundledOnce();
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8");
 
@@ -95,7 +96,7 @@ export class DanmakuReceiver extends events.default {
             this.emit(jsonData.cmd, jsonData.data);
             break;
           case DANMAKU_PROTOCOL.BROTLI: {
-            const resultRaw = brotli.decompress(packetPayload);
+            const resultRaw = deflate(packetPayload, 0);
             const result = new DataView(resultRaw.buffer);
             let offset = 0;
             while (offset < resultRaw.length) {
